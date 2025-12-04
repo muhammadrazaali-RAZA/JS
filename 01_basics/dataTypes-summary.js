@@ -43,3 +43,29 @@ const myFunction = function(){
 }
 
 console.log(typeof myFunction);   // function
+
+
+//  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+// Stack (Primitive), Heap (Non-Primitive)
+
+let  myName = "Raza";
+let anotherName = myName;   // assign COPY of the value
+
+anotherName = "RazaAli";
+
+console.log(myName);              //  Raza
+console.log(anotherName);         //  RazaAli
+
+let userOne = {
+    name: "Raza",
+    age: 27,
+};
+
+let userTwo = userOne;  // assign by REFERENCE
+
+console.log(userTwo);             // { name: 'Raza', age: 27 }
+userTwo.name = "RazaALI" ;
+
+console.log(userOne);             // { name: 'RazaALI', age: 27 }
+console.log(userTwo);             // { name: 'RazaALI', age: 27 }
