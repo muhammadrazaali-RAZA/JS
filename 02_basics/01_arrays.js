@@ -88,7 +88,7 @@ console.log(myArr);                                // [1, 2, 3, 4, 5, 6] (unchan
  * - Modifies the original array (⚠ destructive).
  *
  * ---------------------------------------------------
- * 📝 Key Points:
+ * Key Points:
  *
  * - splice() changes the original array.
  * - slice() does NOT change the original array (returns a copy).
