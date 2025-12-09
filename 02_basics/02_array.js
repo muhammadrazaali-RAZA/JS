@@ -73,3 +73,9 @@ console.log(Array.isArray("RazaAli"));      // false
 console.log(Array.from("RazaAli"));      // [ 'R', 'a', 'z', 'a', 'A', 'l', 'i' ]
 
 console.log(Array.from({name: "RazaAli"}));   // [ ] --if it cant convert, array will be empty
+
+let score1 = 100;
+let score2 = 200;
+let score3 = 300;
+
+console.log(Array.of(score1, score2, score3));
