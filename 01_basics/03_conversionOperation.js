@@ -63,6 +63,7 @@ console.log(booleanIsLoggedIn); // false
 // Investigation
 
 //  1 => true; 0 => false
+//  Boolean ( Number(1 >= n) ) always true, or always 0 is false
 //  "" => false
 //  "something" => ture
 
@@ -109,8 +110,6 @@ let gameCounter = 100;
 console.log(++gameCounter);  // 101  --prefix
 console.log(gameCounter++);  // 101  ++postfix
 console.log(gameCounter);    // 102
-
-
 
 
 

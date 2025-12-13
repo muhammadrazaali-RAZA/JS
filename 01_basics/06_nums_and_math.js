@@ -38,8 +38,10 @@ console.log((Math.random()*10 )+ 1);          // 4.045079397  --Values always st
 
 
 console.log("# from 1 to 10 generate random number ...");
-for (let i = 0; i < 100; i++) {
+for (let i = 0; i < 10; i++) {
     let x = (Math.ceil(Math.random()*10));
     x = x.toString();
-    if (x[0] == 0){console.log(x);}
+    // if (x[0] == 0){
+    console.log(x);
+    // }
 }

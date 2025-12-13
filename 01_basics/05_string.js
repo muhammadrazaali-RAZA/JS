@@ -16,8 +16,8 @@ console.log(gameName.__proto__);              // {}
 gameName2 = gameName2.toUpperCase();
 
 console.log(gameName.length);    // 7
-console.log(gameName2);          // RAZA
-console.log(gameName);           // [String: 'Raza']
+console.log(gameName2);          // RAZAALI
+console.log(gameName);           // [String: 'RazaAli']
 
 console.log(gameName.charAt(2))       // z
 console.log(gameName.indexOf('a'));   // 1
@@ -38,6 +38,6 @@ console.log(url.replaceAll('%20', '-'));  // https://raza.com/ali-raza-choudhary
 
 console.log(url.includes('ali'));   // true
 
-console.log(url.includes('a'));
+console.log(url.includes('a'));     // true
 
 
