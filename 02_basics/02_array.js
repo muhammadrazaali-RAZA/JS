@@ -45,8 +45,8 @@ console.log(allHeros);             // [ 'thor', 'ironman', 'spiderman', 'superma
 function add(a, b, c) {
     return a + b + c;
 }
-const arrayNumbers = [1, 2, 3];
-console.log(add(...arrayNumbers));   // ...numbers spreads [1,2,3] into add(1,2,3)
+const arrayNumbers = [11, 12, 13];
+console.log(add(...arrayNumbers));   // 36  ...numbers spreads [11,12,13] into add(11,12,13)
 
 /***
  * Rest (...)
@@ -78,4 +78,4 @@ let score1 = 100;
 let score2 = 200;
 let score3 = 300;
 
-console.log(Array.of(score1, score2, score3));
+console.log(Array.of(score1, score2, score3));     //  [ 100, 200, 300 ]
