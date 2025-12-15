@@ -54,7 +54,7 @@ console.log(JsUser.greeting);    // [Function (anonymous)]  --This means you are
 JsUser.greeting();               // Hello JS User!          --The () means you are calling (executing) the function.
 
 JsUser.greetingTwo = function () {
-    console.log(`Hello JS User, ${this.user}`);
+    console.log(`Hello JS User, ${this.user}`);   // if we called from Symbol,  ${this[mySymbol]}
 }
 
 JsUser.greeting();      // Hello JS User!
