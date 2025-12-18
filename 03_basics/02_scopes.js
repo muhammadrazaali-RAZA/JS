@@ -105,6 +105,8 @@ function levelOne() {
         console.log(x, y, z);   // 10 20 30 (all accessible)
     }
 
+    // console.log("Calling z: ", z);   // can't access
+
     levelTwo();
 }
 
