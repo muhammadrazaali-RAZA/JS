@@ -119,3 +119,44 @@ console.log("++++++++++++++++++++++++++++++++");
 myCoding.forEach((value) => {
     console.log(value.languageName);
 });
+
+
+/** ---------------------------------------------------------
+ *  ⭐ ADVANCED forEach() CONCEPTS (Important for Interviews)
+ *  ---------------------------------------------------------
+ */
+
+// 1. forEach() cannot be stopped
+// coding.forEach((value) => {
+//     if (value === "cpp") break;   // ❌ SyntaxError
+// });
+// Use for...of or for loop if you need break.
+
+// 2. forEach() does NOT return anything
+// const result = coding.forEach(v => v.toUpperCase());
+// console.log(result);             // undefined
+// If you want a transformed array → use map().
+
+// 3. Mutating the original array
+// You can modify the array inside forEach:
+coding.forEach((value, index, array) => {
+    array[index] = value.toUpperCase();
+});
+console.log(coding);
+
+
+// 4. Asynchronous behavior warning
+// await inside forEach does NOT pause the loop.
+// coding.forEach(async (value) => {
+//     await fetch(...);   // ❌ does NOT wait
+// });
+//  Use:for...of or Promise.all()
+
+
+
+// 5. forEach() vs for...of vs map()
+
+//            	Feature            	     	forEach            	for...of            	map
+//            	Break/Continue  	     	❌ No	              ✔ Yes	            	❌ No
+//            	Returns new array	     	❌ No                 ❌ No            	✔ Yes
+//            	Best for	             	Side effects	      Looping values	    Transforming data
