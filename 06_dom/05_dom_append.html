@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Title</title>
+
+    <style>
+        /* Simple theme */
+        .bg-black {
+            background-color: #000;
+            color: white;
+        }
+    </style>
+</head>
+
+<body class="bg-black">
+<!-- JS will create + insert a new <div> here -->
+</body>
+
+<script>
+    /** =========================================================
+     *  DOM: createElement + build element + append to page
+     *  =========================================================
+     *
+     *  This code demonstrates the “safe” way of building UI:
+     *   1) Create element in memory (not visible yet)
+     *   2) Set attributes/styles/content
+     *   3) Append to DOM (becomes visible)
+     *
+     *  Interview focus:
+     *   ✅ createElement
+     *   ✅ className / id
+     *   ✅ setAttribute vs direct properties
+     *   ✅ innerText vs text nodes
+     *   ✅ appendChild + body.appendChild
+     */
+
+
+    /** ---------------------------------------------------------
+     *  1) Create a <div> in memory (not in DOM yet)
+     *  ---------------------------------------------------------
+     */
+    const div = document.createElement("div");
+    console.log(div); // <div></div> (exists, but not shown on page yet)
+
+
+    /** ---------------------------------------------------------
+     *  2) Add class + id
+     *  ---------------------------------------------------------
+     *
+     *  className sets the entire class string.
+     *  If you want to add/remove classes safely, use classList (shown below).
+     */
+    div.className = "main";
+
+    /*
+      Create a random id:
+      Math.random() gives [0, 1)
+      * 10 => [0, 10)
+      + 1 => [1, 11)
+      round => integer 1..11 (including 11 possible)
+    */
+    div.id = Math.round(Math.random() * 10 + 1);
+
+
+    /** ---------------------------------------------------------
+     *  3) setAttribute() (generic HTML attribute setter)
+     *  ---------------------------------------------------------
+     *
+     *  setAttribute("title", "...") creates a title attribute:
+     *  Hovering on the div will show tooltip in browser.
+     *
+     *  Why people say "prefer setAttribute":
+     *   - good when you want to set arbitrary attributes
+     *   - consistent approach for custom attributes
+     *
+     *  BUT: for common attributes (id, class, value), direct properties
+     *  are also standard and often clearer.
+     */
+    div.setAttribute("title", "generated title");
+
+
+    /** ---------------------------------------------------------
+     *  4) Inline styles (style property)
+     *  ---------------------------------------------------------
+     *
+     *  JS style uses camelCase.
+     *  This creates inline CSS on the element.
+     */
+    div.style.backgroundColor = "green";
+    div.style.padding = "12px";
+
+
+    /** ---------------------------------------------------------
+     *  5) Setting text: innerText vs text node
+     *  ---------------------------------------------------------
+     *
+     *  div.innerText sets visible text inside the div.
+     *  This REPLACES existing text content (if any).
+     */
+    div.innerText = "This is Text of div from script";
+
+    /*
+      Now you create a text node:
+      createTextNode creates a "Text Node" object (not HTML).
+      It's safe because it cannot inject tags.
+    */
+    const addText = document.createTextNode("Chai aur Code");
+
+    /*
+      appendChild(addText) adds this text AFTER existing content.
+      So final visible text becomes roughly:
+        "This is Text of div from scriptChai aur Code"
+      (no space unless you add it manually)
+    */
+    div.appendChild(addText);
+
+
+    /** ---------------------------------------------------------
+     *  6) Append to the DOM (make it visible)
+     *  ---------------------------------------------------------
+     *
+     *  Until now, div was only in memory.
+     *  Once appended, it becomes part of the document and is visible.
+     */
+    document.body.appendChild(div);
+
+
+    /** =========================================================
+     *  Important Interview Notes / Fixes
+     *  =========================================================
+     *
+     *  A) innerText THEN appendChild => text merges (no spacing)
+     *     If you want spacing:
+     *        div.appendChild(document.createTextNode(" " + "Chai aur Code"));
+     *
+     *  B) Better than className for adding/removing:
+     *        div.classList.add("main");
+     *
+     *  C) Prefer textContent when you only want raw text (faster, simpler):
+     *        div.textContent = "Hello";
+     *
+     *  D) Avoid innerHTML unless you need to insert HTML tags.
+     */
+
+
+    /** ---------------------------------------------------------
+     *  OPTIONAL: Cleaner version (recommended style)
+     *  ---------------------------------------------------------
+     *
+     *  This shows how you’d write it in a “clean” interview answer:
+     */
+
+    /*
+    const div2 = document.createElement("div");
+    div2.classList.add("main");
+    div2.id = `box-${crypto.randomUUID?.() || Date.now()}`; // safer unique id idea
+
+    div2.setAttribute("title", "generated title");
+    div2.style.backgroundColor = "green";
+    div2.style.padding = "12px";
+
+    // One consistent approach: use text nodes + append
+    div2.appendChild(document.createTextNode("This is Text of div from script "));
+    div2.appendChild(document.createTextNode("Chai aur Code"));
+
+    document.body.appendChild(div2);
+    */
+</script>
+</html>
