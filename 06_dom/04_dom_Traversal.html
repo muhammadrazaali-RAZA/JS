@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <!-- Viewport meta:
+         Controls how the page scales on mobile.
+         user-scalable=no prevents zoom (not always recommended for accessibility). -->
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>DOM | Chai aur code</title>
+
+    <style>
+        /* Simple class used on <body> to make background black and text white */
+        .bg-black{
+            background-color: #000;
+            color: white;
+        }
+    </style>
+</head>
+
+<body class="bg-black">
+
+<!-- Parent container that holds multiple .day items -->
+<div class="week">
+    <!-- this is a comment (NOTE: comments also count as "nodes" in childNodes) -->
+    <div class="day">Monday</div>
+    <div class="day">Tuesday</div>
+    <div class="day">Wednesday</div>
+    <div class="day">Thursday</div>
+</div>
+
+</body>
+
+
+<script>
+    /** =========================================================
+     *  DOM Traversal Notes (Parent / Children / Siblings / Nodes)
+     *  =========================================================
+     *
+     *  Key idea:
+     *  - "Elements" = actual HTML tags (div, p, h1...)
+     *  - "Nodes"    = elements + text nodes (spaces/line breaks) + comments
+     */
+
+    /** ---------------------------------------------------------
+     *  1) Select the parent container
+     *  ---------------------------------------------------------
+     *
+     *  querySelector(".week") returns the FIRST element with class "week".
+     */
+    const parent = document.querySelector(".week");
+    console.log(parent); // <div class="week">...</div>
+
+
+    /** ---------------------------------------------------------
+     *  2) parent.children (HTMLCollection)
+     *  ---------------------------------------------------------
+     *
+     *  parent.children returns ONLY ELEMENT children (no text nodes, no comments).
+     *  Type: HTMLCollection (LIVE collection):
+     *   - It updates automatically if DOM changes.
+     *   - It has length and index access: children[0], children[1]...
+     *   - It does NOT have forEach directly (convert if needed).
+     */
+    console.log(parent.children); // HTMLCollection(4) [div.day, div.day, div.day, div.day]
+
+
+    /** ---------------------------------------------------------
+     *  3) Reading the content of one child
+     *  ---------------------------------------------------------
+     *
+     *  innerHTML gives the HTML INSIDE that element.
+     *  Here it’s just plain text like "Tuesday".
+     *
+     *  Note:
+     *  - innerText / textContent would also work here.
+     */
+    console.log(parent.children[1].innerHTML); // "Tuesday"
+
+
+    /** ---------------------------------------------------------
+     *  4) Loop through children and print each day name
+     *  ---------------------------------------------------------
+     *
+     *  Classic for-loop works well because HTMLCollection is array-like.
+     */
+    for (let i = 0; i < parent.children.length; i++) {
+        console.log(parent.children[i].innerHTML);
+        // Output:
+        // Monday
+        // Tuesday
+        // Wednesday
+        // Thursday
+    }
+
+
+    /** ---------------------------------------------------------
+     *  5) Styling a specific child
+     *  ---------------------------------------------------------
+     *
+     *  Changes the second day ("Tuesday") text color to orange
+     *  using inline style (style property).
+     */
+    parent.children[1].style.color = "orange";
+
+
+    /** ---------------------------------------------------------
+     *  6) firstElementChild / lastElementChild
+     *  ---------------------------------------------------------
+     *
+     *  These return the FIRST / LAST child ELEMENT (ignores text/comments).
+     */
+    console.log(parent.firstElementChild); // <div class="day">Monday</div>
+    console.log(parent.lastElementChild);  // <div class="day">Thursday</div>
+
+
+    /** ---------------------------------------------------------
+     *  7) Selecting one ".day"
+     *  ---------------------------------------------------------
+     *
+     *  querySelector(".day") returns the FIRST element that matches.
+     *  So dayOne = Monday div.
+     */
+    const dayOne = document.querySelector(".day");
+    console.log(dayOne); // <div class="day">Monday</div>
+
+
+    /** ---------------------------------------------------------
+     *  8) parentElement (move UP the DOM)
+     *  ---------------------------------------------------------
+     *
+     *  From Monday div → parent is the ".week" div.
+     */
+    console.log(dayOne.parentElement); // <div class="week">...</div>
+
+
+    /** ---------------------------------------------------------
+     *  9) nextElementSibling (move sideways)
+     *  ---------------------------------------------------------
+     *
+     *  From Monday div → next sibling element is Tuesday div.
+     *  (Only elements, ignores text nodes.)
+     */
+    console.log(dayOne.nextElementSibling); // <div class="day">Tuesday</div>
+
+
+    /** ---------------------------------------------------------
+     *  10) childNodes (IMPORTANT: includes more than elements)
+     *  ---------------------------------------------------------
+     *
+     *  childNodes returns ALL nodes:
+     *   - Element nodes (<div class="day">)
+     *   - Text nodes (whitespace/line breaks)
+     *   - Comment nodes (<!-- this is a comment -->)
+     *
+     *  That’s why you’ll see a larger list than children.
+     *
+     *  Quick rule:
+     *   - use children / firstElementChild / nextElementSibling for "elements"
+     *   - use childNodes if you really care about nodes (rare in interviews)
+     */
+    console.log("NODES: ", parent.childNodes);
+
+    /*
+      Typical output idea:
+      NodeList(??) [
+        text,
+        comment,
+        text,
+        div.day,
+        text,
+        div.day,
+        text,
+        div.day,
+        text,
+        div.day,
+        text
+      ]
+
+      The "text" nodes appear because HTML has line breaks + spaces.
+    */
+</script>
+</html>
