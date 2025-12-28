@@ -111,6 +111,19 @@ console.log(publishBooks);
 //   { title: 'Book Two', publish: 1992, ... }
 // ]
 
+console.log("---------------------------");
+
+// Chaining:
+// Chaining means calling multiple methods one after another.
+// Each filter() returns a new array, so we can keep filtering step by step.
+
+const filteredChaining = books
+                                    .filter((book) => book.publish > 1985)                 // first filter
+                                    .filter((book) => book.edition > 2009)                 // second filter
+                                    .filter((book) => book.genre === 'Science' || book.genre === 'Fiction'); // third filter
+
+console.log(filteredChaining);
+
 
 /** ---------------------------------------------------------
  *  4. Why filter() is Better Than forEach() for Selection
