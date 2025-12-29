@@ -7,6 +7,23 @@
 
 ## project 1
 
+### My Solution
+
+```javascript
+console.log("Raza ALi")
+const buttons = document.querySelectorAll('.button');
+const body = document.querySelector('body');
+
+buttons.forEach((button) => {
+    button.addEventListener('click', (event) => {
+        body.style.backgroundColor = event.target.id;
+    });
+});
+
+```
+
+### Hitesh Solution
+
 ```javascript
 console.log("hitesh")
 const buttons = document.querySelectorAll('.button');
