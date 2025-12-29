@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DOM edit and remove Elements</title>
+
+    <style>
+        .bg-black{
+            background-color: #000;
+            color: white;
+        }
+    </style>
+</head>
+<body class="bg-black">
+
+    <ul class="language">
+        <li>JavaScript</li>
+    </ul>
+
+</body>
+
+<script>
+    /** =========================================================
+     *  DOM: Add, Edit, Replace, Remove <li> elements
+     *  =========================================================
+     *
+     *  This file covers the 3 most common DOM operations:
+     *   1) Add elements (append)
+     *   2) Edit/Replace elements
+     *   3) Remove elements
+     *
+     *  Interview focus:
+     *   ✅ createElement + appendChild
+     *   ✅ innerHTML vs textContent vs createTextNode (security/performance)
+     *   ✅ querySelector with pseudo selectors (nth-child, first-child, last-child)
+     *   ✅ replaceWith / outerHTML
+     *   ✅ remove
+     */
+
+
+    /** ---------------------------------------------------------
+     *  1) ADD ELEMENT (basic approach)
+     *  ---------------------------------------------------------
+     *
+     *  innerHTML inserts string as HTML.
+     *  Works here, but in real apps this can be risky:
+     *  - if `language` comes from user input, it could inject HTML/JS.
+     *  Example attack if language = "<img onerror=alert(1) src=x>"
+     */
+
+    function addLanguage(language) {
+        const li = document.createElement("li");
+        li.innerHTML = `${language}`;
+        const ul = document.querySelector('.language');
+        ul.appendChild(li);
+    }
+
+    addLanguage("Python");
+    addLanguage("JavaScript");
+    /*
+        After this, list is:
+        1) JavaScript   (original)
+        2) Python
+        3) JavaScript
+    */
+
+
+    /** ---------------------------------------------------------
+     *  2) ADD ELEMENT (optimal / safe approach)
+     *  ---------------------------------------------------------
+     *
+     *  createTextNode makes a pure text node (no HTML parsing).
+     *  This is safer and usually faster than innerHTML.
+     */
+
+    function addOptimalLanguage(language) {
+        const li = document.createElement("li");
+        li.appendChild(document.createTextNode(language));
+        document.querySelector('.language').appendChild(li);
+    }
+
+    addOptimalLanguage("Golang");
+    addOptimalLanguage("Python");
+    /*
+        Now list becomes:
+        1) JavaScript
+        2) Python
+        3) JavaScript
+        4) Golang
+        5) Python
+    */
+
+    /** ---------------------------------------------------------
+     *  3) EDIT / REPLACE ELEMENT (recommended way)
+     *  ---------------------------------------------------------
+     *
+     *  Select 2nd item using CSS pseudo selector:
+     *  li:nth-child(2) => second <li> inside its parent <ul>
+     */
+
+    const secondLang = document.querySelector("li:nth-child(2)")
+    // ❌ Not recommended: overwrites content using HTML parsing
+    // secondLang.innerHTML = "Mojo";
+
+    /*
+      ✅ Better approach: create a new element and replace the old one.
+      Why better?
+      - avoids innerHTML
+      - clean replacement (easy to control)
+      - less risk of injection if using textContent
+    */
+    const newLi = document.createElement("li");
+    newLi.textContent = "Mojo";
+    secondLang.replaceWith(newLi);
+    /*
+        After replacement:
+        1) JavaScript
+        2) Mojo          (replaced the "Python" that was at position 2)
+        3) JavaScript
+        4) Golang
+        5) Python
+    */
+
+    /** ---------------------------------------------------------
+     *  4) EDIT using outerHTML (works, but has a trade-off)
+     *  ---------------------------------------------------------
+     *
+     *  outerHTML replaces the ENTIRE element as a string.
+     *  It deletes the old node and creates a new node from HTML.
+     *
+     *  Trade-offs:
+     *   ✅ quick for demos
+     *   ❌ if you had event listeners on firstLang, they are LOST
+     *   ❌ if HTML string is dynamic, injection risk exists
+     */
+
+    const firstLang = document.querySelector("li:first-child");
+    firstLang.outerHTML = '<li>TypeScript</li>';
+
+    /*
+        Now:
+        1) TypeScript     (new node created)
+        2) Mojo
+        3) JavaScript
+        4) Golang
+        5) Python
+    */
+
+
+    /** ---------------------------------------------------------
+     *  5) REMOVE ELEMENT
+     *  ---------------------------------------------------------
+     *
+     *  li:last-child selects last <li> under the <ul>.
+     *  remove() deletes it from the DOM.
+     */
+    const lastLang = document.querySelector("li:last-child");
+    lastLang.remove();
+    /*
+        Final list:
+        1) TypeScript
+        2) Mojo
+        3) JavaScript
+        4) Golang
+    */
+
+
+
+    /** =========================================================
+     *  Interview-grade takeaways (memorize)
+     *  =========================================================
+     *
+     *  ✅ Prefer:
+     *    - createElement + createTextNode/textContent + appendChild
+     *
+     *  ⚠ Avoid when possible:
+     *    - innerHTML (injection risk, HTML parsing)
+     *    - outerHTML for dynamic data (recreates nodes, kills listeners)
+     *
+     *  ✅ Replacing:
+     *    - oldNode.replaceWith(newNode) is clean and safe
+     *
+     *  ✅ Removing:
+     *    - node.remove()
+     */
+
+
+    /** ---------------------------------------------------------
+     *  OPTIONAL: One-liner utilities you’ll use a lot
+     *  ---------------------------------------------------------
+     */
+
+    // Update text of 3rd li safely (if exists)
+    /*
+    const third = document.querySelector("li:nth-child(3)");
+    if (third) third.textContent = "Updated!";
+    */
+
+    // Remove all li items (clear list)
+    /*
+    document.querySelector(".language").innerHTML = ""; // fast but uses innerHTML
+    // safer approach:
+    const ul = document.querySelector(".language");
+    while (ul.firstChild) ul.removeChild(ul.firstChild);
+    */
+</script>
+</html>
