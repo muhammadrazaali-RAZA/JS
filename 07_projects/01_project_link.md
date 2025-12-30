@@ -55,6 +55,44 @@ buttons.forEach(function (button) {
 
 ## project 2 solution
 
+### My Solution
+
+```javascript
+console.log("Raza ALi")
+const form = document.querySelector('form');
+
+// this usecase will give you empty value
+// const weight = document.getElementById('weight').value;
+// const height = document.getElementById('height').value;
+
+form.addEventListener('submit', (event) => {
+    event.preventDefault();
+
+    const weight = parseInt(document.getElementById('weight').value);
+    const height = parseInt(document.getElementById('height').value);
+    const result = document.getElementById('results');
+
+    if (height <= 0 || isNaN(height)) {
+        result.textContent = `Please give a Valid height: ${height}`;
+    } else if (weight <= 0 || isNaN(weight)) {
+        result.textContent = `Please give a Valid weight ${weight}`;
+    } else {
+        const bmi = (weight / ((height * height) / 10000)).toFixed(2);
+        if (bmi < 18.6) {
+            result.textContent = `Your BMI ${bmi}, under Weight.`;
+        } else if (bmi < 25) {
+            result.textContent = `Your BMI ${bmi}, Normal Weight.`;
+        } else {
+            result.textContent = `Your BMI ${bmi}, OverWeight.`;
+        }
+    }
+});
+
+
+```
+
+### Hitesh Solution
+
 ```javascript
 const form = document.querySelector('form');
 // this usecase will give you empty
@@ -82,6 +120,25 @@ form.addEventListener('submit', function (e) {
 ```
 
 ## project 3 solution code
+
+### My Solution
+
+```javascript
+console.log("Raza ALi")
+const clock = document.getElementById('clock');
+
+const updateClock = () => {
+    const localTime = new Date();
+    clock.textContent = localTime.toLocaleTimeString();
+};
+
+setInterval(updateClock, 1000);
+updateClock();
+
+
+```
+
+### Hitesh Solution
 
 ```javascript
 const clock = document.getElementById('clock');
