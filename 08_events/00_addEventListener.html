@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>htnml Events </title>
+</head>
+<body style="background-color: #414141; color: aliceblue;">
+<h2>Amazing image</h2>
+<div >
+    <ul id="images">
+        <li><img width="200px" id="photoshop" src="https://images.pexels.com/photos/3561339/pexels-photo-3561339.jpeg?auto=compress&cs=tinysrgb&w=1600&lazy=load" alt="photoshop"></li>
+        <li><img width="200px" id="japan" src="https://images.pexels.com/photos/3532553/pexels-photo-3532553.jpeg?auto=compress&cs=tinysrgb&w=1600&lazy=load" alt=""></li>
+        <li><img width="200px" id="river" src="https://images.pexels.com/photos/3532551/pexels-photo-3532551.jpeg?auto=compress&cs=tinysrgb&w=1600&lazy=load" alt=""></li>
+        <li><img width="200px" id="owl" src="https://images.pexels.com/photos/3532552/pexels-photo-3532552.jpeg?auto=compress&cs=tinysrgb&w=1600&lazy=load" alt="" ></li>
+        <li><img width="200px" id="prayer" src="https://images.pexels.com/photos/2522671/pexels-photo-2522671.jpeg?auto=compress&cs=tinysrgb&w=1600&lazy=load" alt=""></li>
+        <li><a style="color: aliceblue;" href="https://google.com" id="google">Google</a></li>
+    </ul>
+</div>
+</body>
+    <script>
+        /** =========================================================
+        *  JAVASCRIPT EVENTS — CORE CONCEPTS (INTERVIEW LEVEL)
+        *  =========================================================
+        *
+        *  An event is an action performed by the user or browser:
+        *   - click
+        *   - keypress
+        *   - mouseover
+        *   - submit
+        *
+        *  addEventListener gives FULL control over events.
+        *  The callback receives an EVENT OBJECT.
+        *
+        *  event = information about WHAT happened.
+        */
+
+
+        /** ---------------------------------------------------------
+        *  1) event.type
+        *  ---------------------------------------------------------
+        *  Tells WHICH event occurred.
+        */
+
+        document.getElementById("owl").addEventListener("click", (event) => {
+        console.log(event.type);
+    });
+
+        /*
+        Output:
+        "click"
+        */
+
+
+        /** ---------------------------------------------------------
+        *  2) event.timeStamp
+        *  ---------------------------------------------------------
+        *  Time (in milliseconds) when the event occurred
+        *  since the page was loaded.
+        */
+
+        document.getElementById("owl").addEventListener("click", (event) => {
+        console.log(event.timeStamp);
+    });
+
+        /*
+        Example output:
+        12453.23
+        (Not exact time — used internally by browser)
+        */
+
+
+        /** ---------------------------------------------------------
+        *  3) event.target
+        *  ---------------------------------------------------------
+        *  The ACTUAL element that triggered the event.
+        *  MOST IMPORTANT PROPERTY.
+        */
+
+        document.getElementById("images").addEventListener("click", (event) => {
+        console.log("target:", event.target);
+    });
+
+        /*
+        If you click on:
+        - owl image → <img id="owl">
+        - Google link → <a id="google">
+        */
+
+
+        /** ---------------------------------------------------------
+        *  4) event.currentTarget
+        *  ---------------------------------------------------------
+        *  The element on which the event listener is ATTACHED.
+        */
+
+        document.getElementById("images").addEventListener("click", (event) => {
+        console.log("currentTarget:", event.currentTarget);
+    });
+
+        /*
+        ALWAYS:
+        <ul id="images">
+            */
+
+
+            /** ---------------------------------------------------------
+            *  target vs currentTarget (INTERVIEW FAVORITE)
+            *  ---------------------------------------------------------
+            *
+            *  target        → where click ACTUALLY happened
+            *  currentTarget → where listener is ATTACHED
+            *
+            *  Used heavily in EVENT DELEGATION.
+            */
+
+
+            /** ---------------------------------------------------------
+            *  5) event.srcElement (OLD / legacy)
+            *  ---------------------------------------------------------
+            *  Older Internet Explorer version of event.target.
+            *  Avoid using — target is standard.
+            */
+
+            document.getElementById("images").addEventListener("click", (event) => {
+            console.log(event.srcElement === event.target); // true (modern browsers)
+        });
+
+
+            /** ---------------------------------------------------------
+            *  6) event.toElement (mouse events)
+            *  ---------------------------------------------------------
+            *  Mostly used with mouseover / mouseout.
+            *  Refers to the element the mouse moved TO.
+            *  Rarely used today.
+            */
+
+
+            /** ---------------------------------------------------------
+            *  7) event.defaultPrevented
+            *  ---------------------------------------------------------
+            *  Returns true if preventDefault() was called.
+            */
+
+            document.getElementById("google").addEventListener("click", (event) => {
+            event.preventDefault();
+            console.log(event.defaultPrevented); // true
+        });
+
+
+            /** ---------------------------------------------------------
+            *  8) preventDefault() — VERY IMPORTANT
+            *  ---------------------------------------------------------
+            *  Stops default browser behavior.
+            *
+            *  Examples:
+            *   - Stop link navigation
+            *   - Stop form submission
+            *   - Stop page refresh
+            */
+
+            document.getElementById("google").addEventListener("click", (event) => {
+            event.preventDefault();
+            console.log("Google link blocked");
+        });
+
+
+            /** ---------------------------------------------------------
+            *  9) Event Bubbling vs Capturing
+            *  ---------------------------------------------------------
+            *
+            *  Bubbling (default, false):
+            *    child → parent → document
+            *
+            *  Capturing (true):
+            *    document → parent → child
+            */
+
+            document.getElementById("images").addEventListener(
+            "click",
+            () => console.log("UL clicked"),
+            false // bubbling
+            );
+
+            document.getElementById("owl").addEventListener(
+            "click",
+            () => console.log("OWL clicked"),
+            false
+            );
+
+            /*
+            Click owl:
+            Output:
+            "OWL clicked"
+            "UL clicked"
+            */
+
+
+            /** ---------------------------------------------------------
+            *  10) Event Delegation (REAL-WORLD USE)
+            *  ---------------------------------------------------------
+            *  Handle all child clicks using ONE listener.
+            */
+
+            document.getElementById("images").addEventListener("click", (event) => {
+            if (event.target.tagName === "IMG") {
+            console.log("Image clicked:", event.target.id);
+            event.target.style.border = "2px solid red";
+        }
+        });
+
+
+            /** =========================================================
+            *  QUICK INTERVIEW CHEAT SHEET
+            *  =========================================================
+            *
+            *  event.type           → event name ("click")
+            *  event.timeStamp      → when event occurred
+            *  event.target         → actual clicked element
+            *  event.currentTarget  → listener attached element
+            *  event.srcElement     → old target (avoid)
+            *  event.toElement      → mouse movement (rare)
+            *  event.preventDefault → stop default action
+            *  event.defaultPrevented → check if prevented
+            *
+            *  false → bubbling (default)
+            *  true  → capturing
+            */
+
+
+            /** =========================================================
+            *  MOUSE & KEYBOARD EVENT PROPERTIES — SIMPLE + PRACTICAL
+            *  =========================================================
+            *
+            *  These properties are asked a LOT in interviews and are
+            *  used in real UI work (drag, drawing, shortcuts, games).
+            *
+            *  Categories:
+            *   11) Mouse position
+            *   12) Keyboard modifier keys
+            *   13) Keyboard key identification
+            */
+
+
+            /** ---------------------------------------------------------
+            *  11) Mouse position properties
+            *  ---------------------------------------------------------
+            *
+            *  clientX / clientY
+            *   → Position relative to the BROWSER VIEWPORT
+            *
+            *  screenX / screenY
+            *   → Position relative to the ENTIRE SCREEN (monitor)
+            */
+
+            // Example: click anywhere on page
+            document.addEventListener("click", (event) => {
+            console.log("clientX:", event.clientX, "clientY:", event.clientY);
+            console.log("screenX:", event.screenX, "screenY:", event.screenY);
+        });
+
+            /*
+            Click same spot:
+            - clientX/clientY → stays same (relative to viewport)
+            - screenX/screenY → changes if window moves on screen
+            */
+
+
+            /** ---------------------------------------------------------
+            *  client vs screen (INTERVIEW ONE-LINER)
+            *  ---------------------------------------------------------
+            *
+            *  clientX/Y → browser window
+            *  screenX/Y → physical screen
+            */
+
+
+            /** ---------------------------------------------------------
+            *  12) Modifier keys (altKey, ctrlKey, shiftKey)
+            *  ---------------------------------------------------------
+            *
+            *  These are BOOLEAN values:
+            *   true  → key was pressed
+            *   false → key was not pressed
+            */
+
+            // Example: detect Ctrl + Click
+            document.addEventListener("click", (event) => {
+            if (event.ctrlKey) {
+            console.log("CTRL + Click detected");
+        }
+            if (event.altKey) {
+            console.log("ALT key held");
+        }
+            if (event.shiftKey) {
+            console.log("SHIFT key held");
+        }
+        });
+
+
+            /** ---------------------------------------------------------
+            *  Real-world usage
+            *  ---------------------------------------------------------
+            *
+            *  Ctrl + Click   → multi-select items
+            *  Shift + Click  → range selection
+            *  Alt + Click    → alternate action
+            */
+
+
+            /** ---------------------------------------------------------
+            *  13) keyCode (IMPORTANT: deprecated but asked)
+            *  ---------------------------------------------------------
+            *
+            *  keyCode tells which key was pressed (number).
+            *  Example:
+            *   Enter → 13
+            *   Escape → 27
+            *   A → 65
+            *
+            *  ⚠ keyCode is DEPRECATED.
+            *  Modern replacement:
+            *   event.key   → "Enter", "a"
+            *   event.code  → "KeyA"
+            */
+
+            // Example: listen to keyboard events
+            document.addEventListener("keydown", (event) => {
+            console.log("keyCode:", event.keyCode);
+            console.log("key:", event.key);
+            console.log("code:", event.code);
+        });
+
+
+            /** ---------------------------------------------------------
+            *  key vs code (INTERVIEW CLARITY)
+            *  ---------------------------------------------------------
+            *
+            *  event.key
+            *   → what character was produced ("a", "A", "Enter")
+            *
+            *  event.code
+            *   → physical key on keyboard ("KeyA", "Enter")
+            */
+
+
+            /** ---------------------------------------------------------
+            *  14) Combining modifier keys + keyboard
+            *  ---------------------------------------------------------
+            */
+
+            // Example: Ctrl + S (prevent save dialog)
+            document.addEventListener("keydown", (event) => {
+            if (event.ctrlKey && event.key === "s") {
+            event.preventDefault();
+            console.log("Ctrl + S blocked");
+        }
+        });
+
+
+            /** ---------------------------------------------------------
+            *  15) Mouse + keyboard combined
+            *  ---------------------------------------------------------
+            */
+
+            // Example: Shift + click to highlight
+            document.addEventListener("click", (event) => {
+            if (event.shiftKey) {
+            document.body.style.backgroundColor = "green";
+            console.log("Shift + click detected");
+        }
+        });
+
+
+            /** =========================================================
+            *  QUICK INTERVIEW SUMMARY (MEMORIZE)
+            *  =========================================================
+            *
+            *  clientX / clientY → mouse position in viewport
+            *  screenX / screenY → mouse position on screen
+            *
+            *  altKey   → ALT pressed (true/false)
+            *  ctrlKey  → CTRL pressed
+            *  shiftKey → SHIFT pressed
+            *
+            *  keyCode  → numeric key (deprecated)
+            *  key      → actual key value
+            *  code     → physical key
+            */
+
+</script>
+</html>

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HTML Events — event.target Deep Notes</title>
+</head>
+
+<body style="background-color:#414141; color:aliceblue;">
+<h2>Amazing image</h2>
+
+<ul id="images">
+    <li><img width="200" id="photoshop" src="https://images.pexels.com/photos/3561339/pexels-photo-3561339.jpeg?auto=compress&cs=tinysrgb&w=1600&lazy=load" alt="photoshop"></li>
+    <li><img width="200" id="japan" src="https://images.pexels.com/photos/3532553/pexels-photo-3532553.jpeg?auto=compress&cs=tinysrgb&w=1600&lazy=load" alt=""></li>
+    <li><img width="200" id="river" src="https://images.pexels.com/photos/3532551/pexels-photo-3532551.jpeg?auto=compress&cs=tinysrgb&w=1600&lazy=load" alt=""></li>
+    <li><img width="200" id="owl" src="https://images.pexels.com/photos/3532552/pexels-photo-3532552.jpeg?auto=compress&cs=tinysrgb&w=1600&lazy=load" alt=""></li>
+    <li><img width="200" id="prayer" src="https://images.pexels.com/photos/2522671/pexels-photo-2522671.jpeg?auto=compress&cs=tinysrgb&w=1600&lazy=load" alt=""></li>
+    <li><a style="color:aliceblue;" href="https://google.com" id="google">Google</a></li>
+</ul>
+
+<script>
+    /** =========================================================
+     *  event.target — Detailed Notes (Simple Words + Real Uses)
+     *  =========================================================
+     *
+     *  event.target = the EXACT element that was clicked / triggered the event.
+     *
+     *  Example:
+     *   - click on <img id="owl">    => target is that img
+     *   - click on <a id="google">   => target is that anchor
+     *
+     *  Why event.target matters:
+     *   ✅ Event Delegation (1 listener for many children)
+     *   ✅ Knowing which item was clicked in a list/table/grid
+     *   ✅ Removing / editing the correct DOM element
+     *   ✅ Tracking analytics (which button user clicked)
+     *   ✅ Dynamic UIs: menus, galleries, todo lists
+     */
+
+    /** ---------------------------------------------------------
+     *  1) target vs currentTarget (INTERVIEW MUST)
+     *  ---------------------------------------------------------
+     *
+     *  target        → where click ACTUALLY happened
+     *  currentTarget → where listener is ATTACHED
+     *
+     *  If listener is on #images (ul):
+     *   - currentTarget will ALWAYS be ul#images
+     *   - target will be img/a/li depending where you clicked
+     */
+
+    const ul = document.getElementById("images");
+
+    ul.addEventListener("click", (event) => {
+        console.log("target:", event.target);              // actual clicked
+        console.log("currentTarget:", event.currentTarget); // ul#images always
+        console.log("target.tagName:", event.target.tagName); // "IMG" or "A" or "LI"
+    }, false);
+
+
+    /** ---------------------------------------------------------
+     *  2) Real-life: Event Delegation (Best practice)
+     *  ---------------------------------------------------------
+     *
+     *  Instead of adding separate click listeners to every image,
+     *  you attach ONE listener to the parent (ul).
+     *
+     *  Then use event.target to know which child was clicked.
+     *
+     *  Benefits:
+     *   ✅ fewer listeners (better performance)
+     *   ✅ works for dynamically added items too
+     */
+
+    ul.addEventListener("click", (event) => {
+        // Only respond if an IMG was clicked
+        if (event.target.tagName === "IMG") {
+            console.log("Image clicked id:", event.target.id);
+
+            // Example action: highlight clicked image
+            event.target.style.border = "3px solid orange";
+
+            // Example action: show alt text
+            console.log("alt:", event.target.alt);
+        }
+    });
+
+
+    /** ---------------------------------------------------------
+     *  3) Real-life: Remove clicked element (gallery delete)
+     *  ---------------------------------------------------------
+     *
+     *  If user clicks an image, remove its <li> from the list.
+     *  BUT: event.target is IMG, so we remove its parent <li>.
+     */
+
+    ul.addEventListener("dblclick", (event) => {
+        if (event.target.tagName === "IMG") {
+            // closest("li") climbs up to nearest <li>
+            const li = event.target.closest("li");
+            if (li) li.remove();
+            console.log("Removed image:", event.target.id);
+        }
+    });
+
+
+    /** ---------------------------------------------------------
+     *  4) Real-life: Handle <a> click safely (prevent navigation)
+     *  ---------------------------------------------------------
+     *
+     *  Click on Google link:
+     *   - default action is navigation to google.com
+     *  preventDefault() stops navigation.
+     */
+
+    document.getElementById("google").addEventListener("click", (event) => {
+        event.preventDefault();      // stop opening Google
+        event.stopPropagation();     // stop bubbling to ul click handlers
+        console.log("Google clicked (blocked)");
+        console.log("target:", event.target); // <a id="google">
+    }, false);
+
+
+    /** ---------------------------------------------------------
+     *  5) Why stopPropagation? (Your code)
+     *  ---------------------------------------------------------
+     *
+     *  By default, click bubbles:
+     *    IMG -> LI -> UL -> BODY -> DOCUMENT
+     *
+     *  If you click #prayer:
+     *   - prayer's listener runs
+     *   - then UL listener runs (unless you stopPropagation)
+     */
+
+    document.getElementById("prayer").addEventListener("click", (event) => {
+        console.log("prayer clicked");
+        event.stopPropagation(); // stops bubbling to UL
+        console.log("target:", event.target); // img#prayer
+    }, false);
+
+
+    /** ---------------------------------------------------------
+     *  6) Common mistake: target might be nested element
+     *  ---------------------------------------------------------
+     *
+     *  Example scenario:
+     *    <button><span>Save</span></button>
+     *  If user clicks span, target = span, not button.
+     *
+     *  Fix: use closest("button") to find intended element.
+     */
+
+    // DEMO pattern:
+    ul.addEventListener("click", (event) => {
+        // Try to find closest IMG or A regardless of exact click point
+        const img = event.target.closest("img");
+        const link = event.target.closest("a");
+
+        if (img) {
+            console.log("Closest IMG id:", img.id);
+        }
+        if (link) {
+            console.log("Closest LINK id:", link.id);
+        }
+    });
+
+
+    /** ---------------------------------------------------------
+     *  7) Production pattern: action based on data-* attributes
+     *  ---------------------------------------------------------
+     *
+     *  Real apps often do:
+     *    <button data-action="delete" data-id="123">Delete</button>
+     *  Then:
+     *    const action = event.target.dataset.action
+     */
+
+    // Not present in your HTML, but here's the correct idea:
+    /*
+    ul.addEventListener("click", (event) => {
+      const btn = event.target.closest("[data-action]");
+      if (!btn) return;
+
+      const action = btn.dataset.action;
+      const id = btn.dataset.id;
+
+      if (action === "delete") { ... }
+    });
+    */
+
+
+    /** =========================================================
+     *  Quick Interview Summary (MEMORIZE)
+     *  =========================================================
+     *
+     *  event.target:
+     *   - actual element clicked
+     *   - used for event delegation
+     *
+     *  event.currentTarget:
+     *   - element where listener is attached
+     *
+     *  Use closest(selector) when clicks happen on nested elements.
+     *
+     *  Use preventDefault() to stop default behavior (like link navigation).
+     *  Use stopPropagation() to stop bubbling to parent handlers.
+     */
+</script>
+</body>
+</html>

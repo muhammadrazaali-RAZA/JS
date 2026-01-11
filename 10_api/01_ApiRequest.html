@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../00_supporting_resources/style.css">
+
+</head>
+    <body style="background-color: #212121; color: white;">
+
+        <div class="buttonContainer">
+            <h1>Generate Profile from Github</h1>
+
+            <!-- Input Field -->
+            <input
+                    type="text"
+                    id="gitID"
+                    value="muhammadrazaali-RAZA"
+                    placeholder="Enter GitHub Username"
+                    class="inputField"
+
+            />
+
+
+            <!-- Button -->
+            <a class="button" id="genGitCard" href="#" title="Yes, turtles.">Generate</a>
+        </div>
+
+    </body>
+    <script>
+        // The XMLHttpRequest.readyState property returns the state an XMLHttpRequest client is in. An XHR client exists in one of the following states:
+        //
+        //     Value	State	Description
+        // 0	UNSENT	Client has been created. open() not called yet.
+        // 1	OPENED	open() has been called.
+        // 2	HEADERS_RECEIVED	send() has been called, and headers and status are available.
+        // 3	LOADING	Downloading; responseText holds partial data.
+        // 4	DONE	The operation is complete.
+
+
+
+        const xhr = new XMLHttpRequest();
+
+        function fetchData(requestUrl) {
+
+            if (!gitId.value){
+                alert("Please enter valid GitHub Username");
+                return;
+            }
+
+            xhr.onreadystatechange = function(requestUrl) {
+                console.log(xhr.readyState);
+
+                if (xhr.readyState === 4) {
+
+                    const data = JSON.parse(this.responseText);
+                    console.log(data.followers);
+                    generateCard(data);
+                }
+            }
+
+            xhr.open("GET", requestUrl);
+
+            xhr.send();
+
+        }
+
+
+
+        const start = document.querySelector("#genGitCard");
+        const gitId = document.querySelector("#gitID");
+
+        start.addEventListener("click", (event) => {
+            const requestUrl = "https://api.github.com/users/"+gitId.value;
+            console.log(requestUrl);
+            fetchData(requestUrl);
+        })
+
+        function generateCard(data) {
+
+            // h2 creating and defining
+            const h2 = document.createElement("h2");
+            h2.setAttribute("style", "text-align: center");
+            h2.textContent = "PROFILE CARD";
+
+            // div creating and defining
+            const innerDiv = document.createElement("div");
+            innerDiv.setAttribute("class", "card");
+
+            // img creating and defining
+            const image = document.createElement("img");
+            image.setAttribute("src", data.avatar_url);
+            image.setAttribute("alt", data.id);
+            image.setAttribute("style", "width:100%");
+
+            // h1 creating and defining
+            const h3 = document.createElement("h3");
+            h3.setAttribute("style", "text-align: center");
+            h3.setAttribute("style", "color:#fb8500");
+            h3.setAttribute("style", "color:#fb8500");
+            h3.textContent = data.name;
+
+            // p creating and defining
+            const date = new Date(data.created_at);
+            const p = document.createElement("p");
+            p.setAttribute("style", "text-align:left");
+            p.innerHTML =
+                `<p>Created Account   : ${date.toDateString()}</p>
+                 <p>Repositories      : ${data.public_repos}</p>
+                 <p>Followers         : ${data.followers}</p>
+                 <p>Following         : ${data.following}</p>
+                 `;
+
+            // append to the DOM
+            innerDiv.append(image);
+            innerDiv.append(h3);
+            innerDiv.append(p);
+
+            h2.appendChild(innerDiv);
+            document.body.appendChild(h2);
+
+        }
+    </script>
+</html>

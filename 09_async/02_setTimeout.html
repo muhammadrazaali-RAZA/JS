@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+    <body>
+        <h1>Applying Async on Web</h1>
+        <button id="stop">Stop</button>
+    </body>
+    <script>
+
+        //  <!--  case 1  -->
+        setTimeout(function() {
+            console.log("case 1");
+            console.log("Waited 2s and printing");
+        }, 2000);
+
+        //  <!--  case 2  -->
+        const caseFunction = function() {
+            console.log("case 2");
+            console.log("Waited 2s and printing");
+        }
+        setTimeout(caseFunction, 2000);
+
+        //  <!--  case 3  -->
+        const changeH1Text = () => {
+            console.log("case 3");
+            console.log("Changing H1 text");
+            document.querySelector("h1").textContent = "Changing the H1 with Time delay";
+        }
+        const stopH1Change =  setTimeout(changeH1Text, 5000);
+
+        //  <!--  stop h1 text to change  -->
+        document.querySelector('#stop').addEventListener(
+            "click", function() {
+                clearTimeout(stopH1Change);
+                console.log("STOPPED H1 being change");
+            }
+        );
+
+    </script>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+    <body>
+        <h1>Applying setInterval & clearInterval on Web</h1>
+        <button id="start">Start</button>
+        <button id="stop">Stop</button>
+    </body>
+        <script>
+
+            let intervalId = null;
+
+            const currentTime = (string) => {
+                console.log(string, new Date().toLocaleTimeString());
+            };
+
+            document.querySelector("#start").addEventListener(
+                "click", () => {
+                    if (intervalId === null) {
+                        intervalId = setInterval(currentTime, 1000, "Time: ");
+                        console.log("Timer started");
+                    }
+
+                }
+            );
+
+            document.querySelector("#stop").addEventListener(
+                "click", () => {
+                    clearInterval(intervalId);
+                    intervalId = null;
+                    console.log("Timer stopped");
+                }
+            );
+
+        </script>
+</html>
